@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../config/colors.dart';
 import '../../providers/auth_provider.dart';
-import '../../config/routes.dart';
+import '../../config/app_routes.dart';
 import '../../widgets/custom_button.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -32,9 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&h=800&fit=crop&q=80',
             fit: BoxFit.cover,
           ),
-          Container(
-            color: Colors.black.withOpacity(0.4),
-          ),
+          Container(color: Colors.black.withOpacity(0.4)),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -67,6 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
+                          // Full Name
                           TextField(
                             controller: _fullNameController,
                             style: const TextStyle(color: AppColors.black),
@@ -78,6 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // Email
                           TextField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -90,6 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // Phone
                           TextField(
                             controller: _phoneController,
                             keyboardType: TextInputType.phone,
@@ -102,6 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // Password
                           TextField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
@@ -110,7 +112,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: 'Password',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
-                                icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                                icon: Icon(_obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
                                 onPressed: () {
                                   setState(() {
                                     _obscurePassword = !_obscurePassword;
@@ -122,6 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 24),
+                          // Email/Password Register Button
                           CustomButton(
                             text: 'Create Account',
                             onPressed: () async {
@@ -130,7 +135,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   _phoneController.text.isEmpty ||
                                   _passwordController.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please fill in all fields')),
+                                  const SnackBar(
+                                      content:
+                                          Text('Please fill in all fields')),
                                 );
                                 return;
                               }
@@ -140,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 email: _emailController.text.trim(),
                                 phone: _phoneController.text.trim(),
                                 password: _passwordController.text.trim(),
-                                role: 'buyer', // always buyer
+                                role: 'buyer',
                               );
                               setState(() => _isLoading = false);
                               if (success) {
@@ -151,26 +158,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   ),
                                 );
-                                Navigator.pushReplacementNamed(context, Routes.login);
+                                Navigator.pushReplacementNamed(
+                                    context, AppRoutes.login);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Registration failed. Try again.')),
+                                  const SnackBar(
+                                      content: Text(
+                                          'Registration failed. Try again.')),
                                 );
                               }
                             },
                             isLoading: _isLoading,
                           ),
                           const SizedBox(height: 16),
+                          // OR divider
+                          Row(
+                            children: [
+                              Expanded(child: Divider(color: AppColors.gray300)),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text('or',
+                                    style: GoogleFonts.inter(
+                                        color: AppColors.gray500)),
+                              ),
+                              Expanded(child: Divider(color: AppColors.gray300)),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          // Google Sign-Up Button
+                          CustomButton(
+                            text: 'Sign up with Google',
+                            onPressed: () async {
+                              setState(() => _isLoading = true);
+                              final success = await authProvider
+                                  .signInWithGoogle();
+                              setState(() => _isLoading = false);
+                              if (success) {
+                                // After Google sign-up, user is logged in and redirected
+                                Navigator.pushReplacementNamed(
+                                    context, authProvider.getHomeRoute());
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Google sign-up failed. Try again.')),
+                                );
+                              }
+                            },
+                            backgroundColor: AppColors.white,
+                            textColor: AppColors.black,
+                            borderColor: AppColors.gray300,
+                            icon: Icons.g_mobiledata,
+                            isLoading: _isLoading,
+                          ),
+                          const SizedBox(height: 16),
+                          // Already have account?
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Already have an account?",
-                                style: GoogleFonts.inter(color: AppColors.gray600),
+                                style: GoogleFonts.inter(
+                                    color: AppColors.gray600),
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushReplacementNamed(context, Routes.login);
+                                  Navigator.pushReplacementNamed(
+                                      context, AppRoutes.login);
                                 },
                                 child: Text(
                                   'Sign In',
