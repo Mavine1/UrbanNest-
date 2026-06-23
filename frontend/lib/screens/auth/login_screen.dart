@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: AppColors.white,
                           textColor: AppColors.black,
                           borderColor: AppColors.gray300,
-                          icon: Icons.g_mobiledata, // Google icon
+                          iconWidget: _buildGoogleIcon(), // Custom Google icon
                           isLoading: _isLoading,
                         ),
                         const SizedBox(height: 12),

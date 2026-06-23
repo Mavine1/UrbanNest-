@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final Color? borderColor;
   final IconData? icon;
+  final Widget? iconWidget;
   final bool isLoading;
 
   const CustomButton({
@@ -19,6 +20,7 @@ class CustomButton extends StatelessWidget {
     this.textColor = AppColors.white,
     this.borderColor,
     this.icon,
+    this.iconWidget,
     this.isLoading = false,
   });
 
@@ -50,8 +52,9 @@ class CustomButton extends StatelessWidget {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  if (iconWidget != null) iconWidget!,
                   if (icon != null) Icon(icon, size: 24),
-                  if (icon != null) const SizedBox(width: 8),
+                  if ((icon != null || iconWidget != null) && text.isNotEmpty) const SizedBox(width: 8),
                   Text(
                     text,
                     style: GoogleFonts.inter(
