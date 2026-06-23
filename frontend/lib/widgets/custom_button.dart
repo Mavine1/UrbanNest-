@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final Color? borderColor;
   final IconData? icon;
   final bool isLoading;
+  final Widget? textWidget;
 
   const CustomButton({
     super.key,
@@ -20,6 +21,7 @@ class CustomButton extends StatelessWidget {
     this.borderColor,
     this.icon,
     this.isLoading = false,
+    this.textWidget,
   });
 
   @override
