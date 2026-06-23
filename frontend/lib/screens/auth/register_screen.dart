@@ -18,11 +18,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String _selectedRole = 'buyer';
   bool _obscurePassword = true;
   bool _isLoading = false;
-
-  final List<String> _roles = ['buyer', 'seller', 'agent'];
 
   @override
   Widget build(BuildContext context) {
@@ -124,29 +121,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fillColor: AppColors.white,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          DropdownButtonFormField<String>(
-                            value: _selectedRole,
-                            style: const TextStyle(color: AppColors.black),
-                            decoration: InputDecoration(
-                              labelText: 'I am a',
-                              prefixIcon: const Icon(Icons.person_outline),
-                              filled: true,
-                              fillColor: AppColors.white,
-                            ),
-                            items: _roles.map((role) {
-                              return DropdownMenuItem(
-                                value: role,
-                                child: Text(role[0].toUpperCase() + role.substring(1)),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedRole = value!;
-                              });
-                            },
-                          ),
                           const SizedBox(height: 24),
+                          // Register Button – always creates a buyer
                           CustomButton(
                             text: 'Create Account',
                             onPressed: () async {
@@ -165,12 +141,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 email: _emailController.text.trim(),
                                 phone: _phoneController.text.trim(),
                                 password: _passwordController.text.trim(),
-                                role: _selectedRole,
+                                role: 'buyer', 
                               );
                               setState(() => _isLoading = false);
                               if (success) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Registration successful! Please verify your OTP.')),
+                                  const SnackBar(
+                                    content: Text(
+                                      'Registration successful! You are now registered as a buyer. Please verify your OTP.',
+                                    ),
+                                  ),
                                 );
                                 Navigator.pushReplacementNamed(context, Routes.login);
                               } else {
