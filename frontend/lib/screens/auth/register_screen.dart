@@ -21,6 +21,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
+  // Custom Google icon
+  Widget _buildGoogleIcon() {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
+      child: const Center(
+        child: Text(
+          'G',
+          style: TextStyle(
+            color: Color(0xFF4285F4),
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -201,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             backgroundColor: AppColors.white,
                             textColor: AppColors.black,
                             borderColor: AppColors.gray300,
-                            icon: Icons.g_mobiledata, 
+                            iconWidget: _buildGoogleIcon(), 
                             isLoading: _isLoading,
                           ),
                           const SizedBox(height: 16),
