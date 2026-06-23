@@ -31,59 +31,60 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: const [
             Text(
               'G',
               style: TextStyle(
                 color: Color(0xFF4285F4), // Blue
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
-                height: 1.0,
+                height: 1.1,
               ),
             ),
             Text(
               'o',
               style: TextStyle(
                 color: Color(0xFFEA4335), // Red
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
-                height: 1.0,
+                height: 1.1,
               ),
             ),
             Text(
               'o',
               style: TextStyle(
                 color: Color(0xFFFBBC05), // Yellow
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
-                height: 1.0,
+                height: 1.1,
               ),
             ),
             Text(
               'g',
               style: TextStyle(
                 color: Color(0xFF34A853), // Green
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
-                height: 1.0,
+                height: 1.1,
               ),
             ),
             Text(
               'l',
               style: TextStyle(
                 color: Color(0xFF4285F4), // Blue
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
-                height: 1.0,
+                height: 1.1,
               ),
             ),
             Text(
               'e',
               style: TextStyle(
                 color: Color(0xFFEA4335), // Red
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
-                height: 1.0,
+                height: 1.1,
               ),
             ),
           ],
