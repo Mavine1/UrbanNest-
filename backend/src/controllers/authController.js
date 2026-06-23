@@ -9,6 +9,8 @@ const generateOTP = () => crypto.randomInt(100000, 999999).toString();
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
 };
+
+// ----- REGISTER (buyer only, auto‑verified) -----
 exports.register = async (req, res) => {
   try {
     const { fullName, email, phone, password } = req.body;
@@ -21,22 +23,27 @@ exports.register = async (req, res) => {
       phone,
       password,
       role: 'buyer',
+      isVerified: true, // auto‑verify
     });
 
-    const otp = generateOTP();
-    user.otp = otp;
-    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
-    await user.save();
+    const token = generateToken(user.id);
     res.status(201).json({
-      message: 'User registered. OTP sent.',
-      userId: user.id,
-      otp, 
+      message: 'Registration successful',
+      token,
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// ----- VERIFY OTP (optional, can be skipped) -----
 exports.verifyOTP = async (req, res) => {
   try {
     const { userId, otp } = req.body;
@@ -62,6 +69,8 @@ exports.verifyOTP = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// ----- RESEND OTP -----
 exports.resendOTP = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -78,6 +87,8 @@ exports.resendOTP = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// ----- LOGIN -----
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -97,6 +108,8 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// ----- GOOGLE LOGIN / SIGN-UP -----
 exports.googleLogin = async (req, res) => {
   try {
     const { idToken } = req.body;
@@ -112,7 +125,7 @@ exports.googleLogin = async (req, res) => {
       user = await User.create({
         fullName: name || 'Google User',
         email,
-        phone: '', // ask later
+        phone: '',
         password: null,
         role: 'buyer',
         isVerified: true,
@@ -133,6 +146,8 @@ exports.googleLogin = async (req, res) => {
     res.status(500).json({ message: 'Google authentication failed' });
   }
 };
+
+// ----- GET CURRENT USER (protected) -----
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findByPk(req.userId, {

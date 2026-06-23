@@ -1,20 +1,29 @@
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { connectDB } = require('./src/config/database');
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'postgres',
+    logging: false,
+    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+  }
+);
 
-app.use(cors());
-app.use(express.json());
-app.use('/api/auth', require('./src/routes/authRoutes'));
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'OK' });
-});
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('PostgreSQL connected.');
+    await sequelize.sync({ alter: true });
+    console.log('Models synced.');
+  } catch (error) {
+    console.error('DB connection error:', error);
+    process.exit(1);
+  }
+};
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-});
+module.exports = { sequelize, connectDB };

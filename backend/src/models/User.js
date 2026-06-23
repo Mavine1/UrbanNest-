@@ -25,7 +25,7 @@ const User = sequelize.define('User', {
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: true, // nullable for Google users
+    allowNull: true,
   },
   role: {
     type: DataTypes.ENUM('buyer', 'agent'),
