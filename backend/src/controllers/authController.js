@@ -82,7 +82,9 @@ exports.resendOTP = async (req, res) => {
     user.otp = otp;
     user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
-    res.status(200).json({ message: 'OTP resent', otp });
+    // For demo purposes, return the OTP (in production, send via SMS/email)
+    console.log(`OTP for ${user.email}: ${otp}`);
+    res.status(200).json({ message: 'OTP resent', otp: otp });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/auth_service.dart';
 import '../models/user.dart';
 import '../config/app_routes.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -86,6 +88,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // Store pending registration data for OTP verification
+  Map<String, String>? _pendingRegistration;
+
   Future<bool> register({
     required String fullName,
     required String email,
@@ -105,10 +110,51 @@ class AuthProvider extends ChangeNotifier {
         password: password,
         role: role,
       );
-      await _saveUserAndToken(response);
+
+      // Store pending registration data for OTP verification
+      _pendingRegistration = {
+        'userId': response['userId'] ?? '',
+        'email': email,
+      };
+
       _isLoading = false;
       notifyListeners();
       return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Map<String, String>? get pendingRegistration => _pendingRegistration;
+
+  Future<bool> verifyOTP(String userId, String otp) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final dio = Dio();
+      dio.options.baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:5000/api';
+
+      final response = await dio.post(
+        '/auth/verify-otp',
+        data: {'userId': userId, 'otp': otp},
+      );
+
+      if (response.statusCode == 200) {
+        await _saveUserAndToken(response.data);
+        _pendingRegistration = null;
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      }
+      _error = response.data['message'] ?? 'Verification failed';
+      _isLoading = false;
+      notifyListeners();
+      return false;
     } catch (e) {
       _error = e.toString();
       _isLoading = false;
