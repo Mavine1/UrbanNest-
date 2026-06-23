@@ -1,29 +1,39 @@
-const { Sequelize } = require('sequelize');
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    logging: false,
-    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
-  }
-);
+const { connectDB } = require('./src/config/database');
+const authRoutes = require('./src/routes/authRoutes');
 
-const connectDB = async () => {
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Connect to DB and start server
+const PORT = process.env.PORT || 5000;
+
+async function startServer() {
   try {
-    await sequelize.authenticate();
-    console.log('PostgreSQL connected.');
-    await sequelize.sync({ alter: true });
-    console.log('Models synced.');
+    await connectDB();
+    console.log('Database connected successfully');
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   } catch (error) {
-    console.error('DB connection error:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
-};
+}
 
-module.exports = { sequelize, connectDB };
+startServer();
