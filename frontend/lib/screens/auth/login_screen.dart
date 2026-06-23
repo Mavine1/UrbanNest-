@@ -214,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Already you have account?",
+                              "Don't have an account?",
                               style: GoogleFonts.inter(color: AppColors.gray600),
                             ),
                             TextButton(
@@ -223,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     context, AppRoutes.register);
                               },
                               child: Text(
-                                'Login',
+                                'Signup',
                                 style: GoogleFonts.inter(
                                   color: AppColors.primaryOrange,
                                   fontWeight: FontWeight.bold,
