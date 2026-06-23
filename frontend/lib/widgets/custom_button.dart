@@ -56,14 +56,17 @@ class CustomButton extends StatelessWidget {
                 children: [
                   if (iconWidget != null) iconWidget!,
                   if (icon != null) Icon(icon, size: 24),
-                  if ((icon != null || iconWidget != null) && text.isNotEmpty) const SizedBox(width: 8),
-                  Text(
-                    text,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                  if ((icon != null || iconWidget != null) && (text.isNotEmpty || textWidget != null)) const SizedBox(width: 8),
+                  if (textWidget != null)
+                    textWidget!
+                  else
+                    Text(
+                      text,
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
                 ],
               ),
       ),

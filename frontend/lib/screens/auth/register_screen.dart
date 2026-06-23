@@ -181,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           const SizedBox(height: 16),
                           CustomButton(
-                            text: 'Sign up with Google',
+                            text: 'Sign up with ',
                             onPressed: () async {
                               setState(() => _isLoading = true);
                               final success = await authProvider
@@ -199,9 +199,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               }
                             },
                             backgroundColor: AppColors.white,
-                            textColor: const Color(0xFF4285F4), // Google Blue
+                            textColor: AppColors.black,
                             borderColor: AppColors.gray300,
                             isLoading: _isLoading,
+                            textWidget: RichText(
+                              text: TextSpan(
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                children: const [
+                                  TextSpan(text: 'Sign up with ', style: TextStyle(color: AppColors black)),
+                                  TextSpan(text: 'G', style: TextStyle(color: Color(0xFF4285F4))),
+                                  TextSpan(text: 'o', style: TextStyle(color: Color(0xFFEA4335))),
+                                  TextSpan(text: 'o', style: TextStyle(color: Color(0xFFFBBC05))),
+                                  TextSpan(text: 'g', style: TextStyle(color: Color(0xFF34A853))),
+                                  TextSpan(text: 'l', style: TextStyle(color: Color(0xFF4285F4))),
+                                  TextSpan(text: 'e', style: TextStyle(color: Color(0xFFEA4335))),
+                                ],
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Row(
