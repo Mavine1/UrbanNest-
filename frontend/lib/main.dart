@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'config/theme.dart';
 import 'providers/auth_provider.dart';
-import 'config/app_routes.dart'; // updated import
+import 'config/app_routes.dart';
 import 'screens/splash/splash_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/auth/login_screen.dart';
@@ -39,12 +39,12 @@ class UrbanestApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.splash,
       routes: {
-        Routes.splash: (_) => const SplashScreen(),
-        Routes.onboarding: (_) => const OnboardingScreen(),
-        Routes.login: (_) => const LoginScreen(),
-        Routes.register: (_) => const RegisterScreen(),
-        Routes.buyerHome: (_) => const BuyerHome(),
-        Routes.agentHome: (_) => const AgentHome(),
+        AppRoutes.splash: (_) => const SplashScreen(),
+        AppRoutes.onboarding: (_) => const OnboardingScreen(),
+        AppRoutes.login: (_) => const LoginScreen(),
+        AppRoutes.register: (_) => const RegisterScreen(),
+        AppRoutes.buyerHome: (_) => const BuyerHome(),
+        AppRoutes.agentHome: (_) => const AgentHome(),
       },
     );
   }
