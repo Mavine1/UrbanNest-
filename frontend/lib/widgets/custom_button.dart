@@ -9,8 +9,6 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final Color? borderColor;
   final IconData? icon;
-  final Widget? iconWidget;
-  final Widget? textWidget;
   final bool isLoading;
 
   const CustomButton({
@@ -21,8 +19,6 @@ class CustomButton extends StatelessWidget {
     this.textColor = AppColors.white,
     this.borderColor,
     this.icon,
-    this.iconWidget,
-    this.textWidget,
     this.isLoading = false,
   });
 
@@ -37,36 +33,24 @@ class CustomButton extends StatelessWidget {
           backgroundColor: backgroundColor,
           foregroundColor: textColor,
           side: borderColor != null ? BorderSide(color: borderColor!) : null,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 0,
         ),
         child: isLoading
             ? const SizedBox(
                 height: 24,
                 width: 24,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
+                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (iconWidget != null) iconWidget!,
                   if (icon != null) Icon(icon, size: 24),
-                  if ((icon != null || iconWidget != null) && (text.isNotEmpty || textWidget != null)) const SizedBox(width: 8),
-                  if (textWidget != null)
-                    textWidget!
-                  else
-                    Text(
-                      text,
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  if (icon != null) const SizedBox(width: 8),
+                  Text(
+                    text,
+                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
       ),

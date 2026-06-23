@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/auth_service.dart';
 import '../models/user.dart';
 import '../config/app_routes.dart';
@@ -9,6 +10,7 @@ class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final SharedPreferences _prefs;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   User? _user;
   bool _isLoading = false;
@@ -37,6 +39,38 @@ class AuthProvider extends ChangeNotifier {
         role: userRole,
       );
       notifyListeners();
+    }
+  }
+
+  Future<void> _saveUserAndToken(Map<String, dynamic> data) async {
+    final token = data['token'] as String;
+    final userData = data['user'] as Map<String, dynamic>;
+    final user = User.fromJson(userData);
+
+    await _secureStorage.write(key: 'token', value: token);
+    await _prefs.setString('userId', user.id);
+    await _prefs.setString('userName', user.fullName);
+    await _prefs.setString('userEmail', user.email);
+    await _prefs.setString('userRole', user.role);
+
+    _user = user;
+    notifyListeners();
+  }
+
+  Future<void> _clearUserAndToken() async {
+    await _secureStorage.delete(key: 'token');
+    await _prefs.remove('userId');
+    await _prefs.remove('userName');
+    await _prefs.remove('userEmail');
+    await _prefs.remove('userRole');
+    _user = null;
+    notifyListeners();
+  }
+
+  Future<void> checkAuthStatus() async {
+    final token = await _secureStorage.read(key: 'token');
+    if (token != null && _user == null) {
+      _loadUserFromStorage();
     }
   }
 
@@ -71,18 +105,10 @@ class AuthProvider extends ChangeNotifier {
         password: password,
         role: role,
       );
-
-      if (response['success'] == true) {
-        await _saveUser(response['user']);
-        _isLoading = false;
-        notifyListeners();
-        return true;
-      } else {
-        _error = response['message'] ?? 'Registration failed';
-        _isLoading = false;
-        notifyListeners();
-        return false;
-      }
+      await _saveUserAndToken(response);
+      _isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
       _error = e.toString();
       _isLoading = false;
@@ -100,22 +126,11 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _authService.login(
-        email: email,
-        password: password,
-      );
-
-      if (response['success'] == true) {
-        await _saveUser(response['user']);
-        _isLoading = false;
-        notifyListeners();
-        return true;
-      } else {
-        _error = response['message'] ?? 'Login failed';
-        _isLoading = false;
-        notifyListeners();
-        return false;
-      }
+      final response = await _authService.login(email: email, password: password);
+      await _saveUserAndToken(response);
+      _isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
       _error = e.toString();
       _isLoading = false;
@@ -123,10 +138,12 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
+
   Future<bool> signInWithGoogle() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
+
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -136,7 +153,6 @@ class AuthProvider extends ChangeNotifier {
       }
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final idToken = googleAuth.idToken;
-
       if (idToken == null) {
         _error = 'Failed to get Google ID token';
         _isLoading = false;
@@ -144,18 +160,10 @@ class AuthProvider extends ChangeNotifier {
         return false;
       }
       final response = await _authService.googleLogin(idToken);
-
-      if (response['success'] == true) {
-        await _saveUser(response['user']);
-        _isLoading = false;
-        notifyListeners();
-        return true;
-      } else {
-        _error = response['message'] ?? 'Google login failed';
-        _isLoading = false;
-        notifyListeners();
-        return false;
-      }
+      await _saveUserAndToken(response);
+      _isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
       _error = e.toString();
       _isLoading = false;
@@ -163,24 +171,10 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-  Future<void> _saveUser(Map<String, dynamic> userData) async {
-    final user = User.fromJson(userData);
-    _user = user;
-
-    await _prefs.setString('userId', user.id);
-    await _prefs.setString('userName', user.fullName);
-    await _prefs.setString('userEmail', user.email);
-    await _prefs.setString('userRole', user.role);
-  }
 
   Future<void> logout() async {
-    _user = null;
-    await _prefs.remove('userId');
-    await _prefs.remove('userName');
-    await _prefs.remove('userEmail');
-    await _prefs.remove('userRole');
-    await _authService.deleteToken();
-    notifyListeners();
+    await _clearUserAndToken();
+    await _googleSignIn.signOut();
   }
 
   void clearError() {
