@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'config/theme.dart';
+import 'providers/auth_provider.dart';
+import 'config/routes.dart';
+import 'screens/splash/splash_screen.dart';
+import 'screens/onboarding/onboarding_screen.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/auth/register_screen.dart';
+import 'screens/home/buyer_home.dart';
+import 'screens/home/seller_home.dart';
+import 'screens/home/agent_home.dart';
+import 'screens/home/admin_home.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+  final prefs = await SharedPreferences.getInstance();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(prefs),
+        ),
+      ],
+      child: const UrbanestApp(),
+    ),
+  );
+}
+
+class UrbanestApp extends StatelessWidget {
+  const UrbanestApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Urbanest',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      initialRoute: Routes.splash,
+      routes: {
+        Routes.splash: (_) => const SplashScreen(),
+        Routes.onboarding: (_) => const OnboardingScreen(),
+        Routes.login: (_) => const LoginScreen(),
+        Routes.register: (_) => const RegisterScreen(),
+        Routes.buyerHome: (_) => const BuyerHome(),
+        Routes.sellerHome: (_) => const SellerHome(),
+        Routes.agentHome: (_) => const AgentHome(),
+        Routes.adminHome: (_) => const AdminHome(),
+      },
+    );
+  }
+}

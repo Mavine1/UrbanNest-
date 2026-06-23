@@ -1,0 +1,16 @@
+
+# ── Added automatically by cron-git-push ──
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+dist/
+build/
+.next/
+out/
+node_modules/
+.DS_Store
+Thumbs.db
+cron-logs.json
