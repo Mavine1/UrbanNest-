@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // 👈 new import
 import '../../config/colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../config/app_routes.dart';
@@ -178,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: AppColors.white,
                           textColor: AppColors.black,
                           borderColor: AppColors.gray300,
-                          icon: FontAwesomeIcons.google, // 👈 updated
+                          icon: Icons.g_mobiledata, // Google icon
                           isLoading: _isLoading,
                         ),
                         const SizedBox(height: 12),
