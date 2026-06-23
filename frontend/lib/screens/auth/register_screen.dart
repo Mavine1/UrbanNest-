@@ -21,80 +21,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
-  // Custom Google icon with proper colors
-  Widget _buildGoogleIcon() {
-    return Container(
-      width: 24,
-      height: 24,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Text(
-              'G',
-              style: TextStyle(
-                color: Color(0xFF4285F4), // Blue
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
-              ),
-            ),
-            Text(
-              'o',
-              style: TextStyle(
-                color: Color(0xFFEA4335), // Red
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
-              ),
-            ),
-            Text(
-              'o',
-              style: TextStyle(
-                color: Color(0xFFFBBC05), // Yellow
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
-              ),
-            ),
-            Text(
-              'g',
-              style: TextStyle(
-                color: Color(0xFF34A853), // Green
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
-              ),
-            ),
-            Text(
-              'l',
-              style: TextStyle(
-                color: Color(0xFF4285F4), // Blue
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
-              ),
-            ),
-            Text(
-              'e',
-              style: TextStyle(
-                color: Color(0xFFEA4335), // Red
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -273,9 +199,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               }
                             },
                             backgroundColor: AppColors.white,
-                            textColor: AppColors.black,
+                            textColor: const Color(0xFF4285F4), // Google Blue
                             borderColor: AppColors.gray300,
-                            iconWidget: _buildGoogleIcon(), 
                             isLoading: _isLoading,
                           ),
                           const SizedBox(height: 16),
