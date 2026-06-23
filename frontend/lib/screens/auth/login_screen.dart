@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // 👈 new import
 import '../../config/colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../config/app_routes.dart';
@@ -30,9 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
             'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=800&fit=crop&q=80',
             fit: BoxFit.cover,
           ),
-          Container(
-            color: Colors.black.withOpacity(0.4),
-          ),
+          Container(color: Colors.black.withOpacity(0.4)),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -87,7 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             hintText: '••••••••',
                             prefixIcon: const Icon(Icons.lock_outline),
                             suffixIcon: IconButton(
-                              icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                              icon: Icon(_obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                               onPressed: () {
                                 setState(() {
                                   _obscurePassword = !_obscurePassword;
@@ -116,23 +117,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomButton(
                           text: 'Sign In',
                           onPressed: () async {
-                            if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                            if (_emailController.text.isEmpty ||
+                                _passwordController.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Please fill in all fields')),
+                                const SnackBar(
+                                    content:
+                                        Text('Please fill in all fields')),
                               );
                               return;
                             }
                             setState(() => _isLoading = true);
                             final success = await authProvider.login(
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
                             );
                             setState(() => _isLoading = false);
                             if (success) {
-                              Navigator.pushReplacementNamed(context, authProvider.getHomeRoute());
+                              Navigator.pushReplacementNamed(
+                                  context, authProvider.getHomeRoute());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Login failed. Check credentials.')),
+                                const SnackBar(
+                                    content: Text(
+                                        'Login failed. Check credentials.')),
                               );
                             }
                           },
@@ -144,7 +151,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(child: Divider(color: AppColors.gray300)),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Text('or', style: GoogleFonts.inter(color: AppColors.gray500)),
+                              child: Text('or',
+                                  style: GoogleFonts.inter(
+                                      color: AppColors.gray500)),
                             ),
                             Expanded(child: Divider(color: AppColors.gray300)),
                           ],
@@ -157,17 +166,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             final success = await authProvider.signInWithGoogle();
                             setState(() => _isLoading = false);
                             if (success) {
-                              Navigator.pushReplacementNamed(context, authProvider.getHomeRoute());
+                              Navigator.pushReplacementNamed(
+                                  context, authProvider.getHomeRoute());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Google sign-in failed')),
+                                const SnackBar(
+                                    content: Text('Google sign-in failed')),
                               );
                             }
                           },
                           backgroundColor: AppColors.white,
                           textColor: AppColors.black,
                           borderColor: AppColors.gray300,
-                          icon: Icons.g_mobiledata,
+                          icon: FontAwesomeIcons.google, // 👈 updated
                           isLoading: _isLoading,
                         ),
                         const SizedBox(height: 12),
@@ -175,7 +186,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: 'Sign in with Facebook',
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Facebook sign-in coming soon')),
+                              const SnackBar(
+                                  content: Text('Facebook sign-in coming soon')),
                             );
                           },
                           backgroundColor: const Color(0xFF1877F2),
@@ -192,7 +204,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushReplacementNamed(context, AppRoutes.register);
+                                Navigator.pushReplacementNamed(
+                                    context, AppRoutes.register);
                               },
                               child: Text(
                                 'Login',
