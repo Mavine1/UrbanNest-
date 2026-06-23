@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../config/app_routes.dart';
@@ -202,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             backgroundColor: AppColors.white,
                             textColor: AppColors.black,
                             borderColor: AppColors.gray300,
-                            icon: FontAwesomeIcons.google, 
+                            icon: Icons.g_mobiledata, 
                             isLoading: _isLoading,
                           ),
                           const SizedBox(height: 16),
