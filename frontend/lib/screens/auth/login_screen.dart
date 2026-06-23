@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../config/colors.dart';
 import '../../providers/auth_provider.dart';
-import '../../config/routes.dart';
+import '../../config/app_routes.dart';
 import '../../widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -124,8 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             setState(() => _isLoading = true);
                             final success = await authProvider.login(
-                              _emailController.text.trim(),
-                              _passwordController.text.trim(),
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text.trim(),
                             );
                             setState(() => _isLoading = false);
                             if (success) {
@@ -192,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushReplacementNamed(context, Routes.register);
+                                Navigator.pushReplacementNamed(context, AppRoutes.register);
                               },
                               child: Text(
                                 'Login',
