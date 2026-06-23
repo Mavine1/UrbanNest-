@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary palette (Urbanest – Orange/White/Black)
   static const Color primaryOrange = Color(0xFFFF6B00);
   static const Color orangeLight = Color(0xFFFF9A33);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF1A1A1A);
 
-  // Supporting colours
   static const Color success = Color(0xFF2ECC71);
   static const Color warning = Color(0xFFF39C12);
   static const Color error = Color(0xFFE74C3C);
 
-  // Grays
   static const Color gray50 = Color(0xFFF9FAFB);
   static const Color gray100 = Color(0xFFF3F4F6);
   static const Color gray200 = Color(0xFFE5E7EB);

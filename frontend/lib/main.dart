@@ -17,7 +17,6 @@ void main() async {
   await dotenv.load();
   final prefs = await SharedPreferences.getInstance();
 
-  // Create AuthProvider and check authentication status
   final authProvider = AuthProvider(prefs);
   await authProvider.checkAuthStatus();
 
@@ -42,7 +41,6 @@ class UrbanestApp extends StatelessWidget {
           title: 'Urbanest',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
-          // If authenticated, go straight to the role‑based home; otherwise show splash
           home: authProvider.isAuthenticated
               ? authProvider.user?.role == 'buyer'
                   ? const BuyerHome()
