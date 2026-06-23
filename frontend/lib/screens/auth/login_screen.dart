@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontWeight: FontWeight.w600,
                               ),
                               children: const [
-                                TextSpan(text: 'Sign in with ', style: TextStyle(color: AppColors black)),
+                                TextSpan(text: 'Sign in with ', style: TextStyle(color: Colors.black)),
                                 TextSpan(text: 'G', style: TextStyle(color: Color(0xFF4285F4))),
                                 TextSpan(text: 'o', style: TextStyle(color: Color(0xFFEA4335))),
                                 TextSpan(text: 'o', style: TextStyle(color: Color(0xFFFBBC05))),
