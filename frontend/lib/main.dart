@@ -55,6 +55,18 @@ class UrbanestApp extends StatelessWidget {
             AppRoutes.buyerHome: (_) => const BuyerHome(),
             AppRoutes.agentHome: (_) => const AgentHome(),
           },
+          onGenerateRoute: (settings) {
+            if (settings.name == AppRoutes.otp) {
+              final args = settings.arguments as Map<String, String>;
+              return MaterialPageRoute(
+                builder: (_) => OTPScreen(
+                  userId: args['userId'] ?? '',
+                  email: args['email'] ?? '',
+                ),
+              );
+            }
+            return null;
+          },
         );
       },
     );

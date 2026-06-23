@@ -10,32 +10,33 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
 };
 
-// ----- REGISTER (buyer only, auto‑verified) -----
+// ----- REGISTER (buyer only, requires OTP verification) -----
 exports.register = async (req, res) => {
   try {
-    const { fullName, email, phone, password } = req.body;
+    const { fullName, email, phone, password, role } = req.body;
     const existing = await User.findOne({ where: { email } });
     if (existing) return res.status(400).json({ message: 'Email already registered' });
 
+    const otp = generateOTP();
     const user = await User.create({
       fullName,
       email,
       phone,
       password,
-      role: 'buyer',
-      isVerified: true, // auto‑verify
+      role: role || 'buyer',
+      isVerified: false,
+      otp: otp,
+      otpExpiry: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
     });
 
-    const token = generateToken(user.id);
+    // For demo purposes, return the OTP in response (in production, send via SMS/email)
+    console.log(`OTP for ${email}: ${otp}`);
+
     res.status(201).json({
-      message: 'Registration successful',
-      token,
-      user: {
-        id: user.id,
-        fullName: user.fullName,
-        email: user.email,
-        role: user.role,
-      },
+      message: 'Registration successful. Please verify your OTP.',
+      userId: user.id,
+      email: user.email,
+      otp: otp, // Remove this in production - OTP should be sent via SMS/email
     });
   } catch (error) {
     console.error(error);
