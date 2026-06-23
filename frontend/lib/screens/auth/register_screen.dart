@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../config/app_routes.dart';
@@ -65,7 +66,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          // Full Name
                           TextField(
                             controller: _fullNameController,
                             style: const TextStyle(color: AppColors.black),
@@ -77,7 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // Email
                           TextField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -90,7 +89,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // Phone
                           TextField(
                             controller: _phoneController,
                             keyboardType: TextInputType.phone,
@@ -103,7 +101,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // Password
                           TextField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
@@ -126,7 +123,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          // Email/Password Register Button
                           CustomButton(
                             text: 'Create Account',
                             onPressed: () async {
@@ -171,7 +167,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             isLoading: _isLoading,
                           ),
                           const SizedBox(height: 16),
-                          // OR divider
                           Row(
                             children: [
                               Expanded(child: Divider(color: AppColors.gray300)),
@@ -186,7 +181,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          // Google Sign-Up Button
                           CustomButton(
                             text: 'Sign up with Google',
                             onPressed: () async {
@@ -195,7 +189,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   .signInWithGoogle();
                               setState(() => _isLoading = false);
                               if (success) {
-                                // After Google sign-up, user is logged in and redirected
                                 Navigator.pushReplacementNamed(
                                     context, authProvider.getHomeRoute());
                               } else {
@@ -209,11 +202,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             backgroundColor: AppColors.white,
                             textColor: AppColors.black,
                             borderColor: AppColors.gray300,
-                            icon: Icons.g_mobiledata,
+                            icon: FontAwesomeIcons.google, 
                             isLoading: _isLoading,
                           ),
                           const SizedBox(height: 16),
-                          // Already have account?
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
