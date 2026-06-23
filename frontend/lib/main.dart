@@ -9,6 +9,7 @@ import 'screens/splash/splash_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
+import 'screens/auth/otp_screen.dart';
 import 'screens/home/buyer_home.dart';
 import 'screens/home/agent_home.dart';
 
