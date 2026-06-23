@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../config/colors.dart';
 
 class AgentHome extends StatelessWidget {
   const AgentHome({super.key});
@@ -13,7 +14,7 @@ class AgentHome extends StatelessWidget {
         title: const Text('Agent Dashboard'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: AppColors.black),
             onPressed: () async {
               await auth.logout();
               Navigator.pushReplacementNamed(context, '/login');

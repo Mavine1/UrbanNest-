@@ -10,9 +10,7 @@ import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/home/buyer_home.dart';
-import 'screens/home/seller_home.dart';
 import 'screens/home/agent_home.dart';
-import 'screens/home/admin_home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,9 +44,7 @@ class UrbanestApp extends StatelessWidget {
         Routes.login: (_) => const LoginScreen(),
         Routes.register: (_) => const RegisterScreen(),
         Routes.buyerHome: (_) => const BuyerHome(),
-        Routes.sellerHome: (_) => const SellerHome(),
         Routes.agentHome: (_) => const AgentHome(),
-        Routes.adminHome: (_) => const AdminHome(),
       },
     );
   }

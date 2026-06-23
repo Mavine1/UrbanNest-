@@ -122,7 +122,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          // Register Button – always creates a buyer
                           CustomButton(
                             text: 'Create Account',
                             onPressed: () async {
@@ -141,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 email: _emailController.text.trim(),
                                 phone: _phoneController.text.trim(),
                                 password: _passwordController.text.trim(),
-                                role: 'buyer', 
+                                role: 'buyer', // always buyer
                               );
                               setState(() => _isLoading = false);
                               if (success) {

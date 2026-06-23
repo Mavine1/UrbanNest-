@@ -119,17 +119,14 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Only two roles: buyer and agent
   String getHomeRoute() {
     if (_user == null) return Routes.login;
     switch (_user!.role) {
       case 'buyer':
         return Routes.buyerHome;
-      case 'seller':
-        return Routes.sellerHome;
       case 'agent':
         return Routes.agentHome;
-      case 'admin':
-        return Routes.adminHome;
       default:
         return Routes.login;
     }
