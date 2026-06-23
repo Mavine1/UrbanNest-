@@ -44,17 +44,18 @@ class CustomButton extends StatelessWidget {
                 width: 24,
                 child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
               )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (icon != null) Icon(icon, size: 24),
-                  if (icon != null) const SizedBox(width: 8),
-                  Text(
-                    text,
-                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
+            : textWidget ??
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null) Icon(icon, size: 24),
+                    if (icon != null) const SizedBox(width: 8),
+                    Text(
+                      text,
+                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
       ),
     );
   }
