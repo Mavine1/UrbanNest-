@@ -16,12 +16,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   final prefs = await SharedPreferences.getInstance();
+
+  // Create AuthProvider and check authentication status
+  final authProvider = AuthProvider(prefs);
+  await authProvider.checkAuthStatus();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthProvider(prefs),
-        ),
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
       ],
       child: const UrbanestApp(),
     ),
@@ -33,18 +36,27 @@ class UrbanestApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Urbanest',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      initialRoute: AppRoutes.splash,
-      routes: {
-        AppRoutes.splash: (_) => const SplashScreen(),
-        AppRoutes.onboarding: (_) => const OnboardingScreen(),
-        AppRoutes.login: (_) => const LoginScreen(),
-        AppRoutes.register: (_) => const RegisterScreen(),
-        AppRoutes.buyerHome: (_) => const BuyerHome(),
-        AppRoutes.agentHome: (_) => const AgentHome(),
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, child) {
+        return MaterialApp(
+          title: 'Urbanest',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          // If authenticated, go straight to the role‑based home; otherwise show splash
+          home: authProvider.isAuthenticated
+              ? authProvider.user?.role == 'buyer'
+                  ? const BuyerHome()
+                  : const AgentHome()
+              : const SplashScreen(),
+          routes: {
+            AppRoutes.splash: (_) => const SplashScreen(),
+            AppRoutes.onboarding: (_) => const OnboardingScreen(),
+            AppRoutes.login: (_) => const LoginScreen(),
+            AppRoutes.register: (_) => const RegisterScreen(),
+            AppRoutes.buyerHome: (_) => const BuyerHome(),
+            AppRoutes.agentHome: (_) => const AgentHome(),
+          },
+        );
       },
     );
   }
