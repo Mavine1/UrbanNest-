@@ -123,12 +123,10 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-
   Future<bool> signInWithGoogle() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
-
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -136,7 +134,6 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
         return false;
       }
-
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final idToken = googleAuth.idToken;
 
@@ -146,7 +143,6 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
         return false;
       }
-
       final response = await _authService.googleLogin(idToken);
 
       if (response['success'] == true) {
@@ -167,7 +163,6 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-
   Future<void> _saveUser(Map<String, dynamic> userData) async {
     final user = User.fromJson(userData);
     _user = user;

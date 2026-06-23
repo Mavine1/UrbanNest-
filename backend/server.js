@@ -8,13 +8,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-
-// Health check endpoint
-app.get('/api/status', (req, res) => {
-  res.json({ status: 'Urbanest API is running' });
+app.use('/api/auth', require('./src/routes/authRoutes'));
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
 });
 
-// Connect to database and start server
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
