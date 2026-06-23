@@ -1,20 +1,149 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
 import '../models/user.dart';
-import '../config/app_routes.dart'; // updated import
+import '../config/app_routes.dart';
 
-// ... inside AuthProvider class
+class AuthProvider extends ChangeNotifier {
+  final AuthService _authService = AuthService();
+  final SharedPreferences _prefs;
 
-String getHomeRoute() {
-  if (_user == null) return AppRoutes.login;
-  switch (_user!.role) {
-    case 'buyer':
-      return AppRoutes.buyerHome;
-    case 'agent':
-      return AppRoutes.agentHome;
-    default:
-      return AppRoutes.login;
+  User? _user;
+  bool _isLoading = false;
+  String? _error;
+
+  AuthProvider(this._prefs) {
+    _loadUserFromStorage();
+  }
+
+  User? get user => _user;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+  bool get isAuthenticated => _user != null;
+
+  void _loadUserFromStorage() {
+    final userId = _prefs.getString('userId');
+    final userName = _prefs.getString('userName');
+    final userEmail = _prefs.getString('userEmail');
+    final userRole = _prefs.getString('userRole');
+
+    if (userId != null && userName != null && userEmail != null && userRole != null) {
+      _user = User(
+        id: userId,
+        fullName: userName,
+        email: userEmail,
+        role: userRole,
+      );
+      notifyListeners();
+    }
+  }
+
+  String getHomeRoute() {
+    if (_user == null) return AppRoutes.login;
+    switch (_user!.role) {
+      case 'buyer':
+        return AppRoutes.buyerHome;
+      case 'agent':
+        return AppRoutes.agentHome;
+      default:
+        return AppRoutes.login;
+    }
+  }
+
+  Future<bool> register({
+    required String fullName,
+    required String email,
+    required String phone,
+    required String password,
+    required String role,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final response = await _authService.register(
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        password: password,
+        role: role,
+      );
+
+      if (response['success'] == true) {
+        await _saveUser(response['user']);
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _error = response['message'] ?? 'Registration failed';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final response = await _authService.login(
+        email: email,
+        password: password,
+      );
+
+      if (response['success'] == true) {
+        await _saveUser(response['user']);
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _error = response['message'] ?? 'Login failed';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<void> _saveUser(Map<String, dynamic> userData) async {
+    final user = User.fromJson(userData);
+    _user = user;
+
+    await _prefs.setString('userId', user.id);
+    await _prefs.setString('userName', user.fullName);
+    await _prefs.setString('userEmail', user.email);
+    await _prefs.setString('userRole', user.role);
+  }
+
+  Future<void> logout() async {
+    _user = null;
+    await _prefs.remove('userId');
+    await _prefs.remove('userName');
+    await _prefs.remove('userEmail');
+    await _prefs.remove('userRole');
+    await _authService.deleteToken();
+    notifyListeners();
+  }
+
+  void clearError() {
+    _error = null;
+    notifyListeners();
   }
 }
