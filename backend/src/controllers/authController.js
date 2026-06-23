@@ -97,9 +97,18 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+
+    // Check if user is verified
     if (!user.isVerified) return res.status(401).json({ message: 'Please verify your email/phone' });
+
+    // For Google users (password is null), they can't login with password
+    if (!user.password) {
+      return res.status(401).json({ message: 'Please use Google Sign-In to login' });
+    }
+
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
     const token = generateToken(user.id);
     res.status(200).json({
       message: 'Login successful',

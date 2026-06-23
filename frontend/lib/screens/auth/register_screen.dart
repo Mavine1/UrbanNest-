@@ -146,15 +146,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               );
                               setState(() => _isLoading = false);
                               if (success) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Registration successful! You are now registered as a buyer. Please verify your OTP.',
+                                final pendingReg = authProvider.pendingRegistration;
+                                if (pendingReg != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Registration successful! Please verify your OTP.',
+                                      ),
+                                      backgroundColor: Colors.green,
                                     ),
-                                  ),
-                                );
-                                Navigator.pushReplacementNamed(
-                                    context, AppRoutes.login);
+                                  );
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    AppRoutes.otp,
+                                    arguments: pendingReg,
+                                  );
+                                } else {
+                                  Navigator.pushReplacementNamed(
+                                      context, AppRoutes.login);
+                                }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
