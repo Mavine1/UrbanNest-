@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
-  // Custom Google icon
+  // Custom Google icon with proper colors
   Widget _buildGoogleIcon() {
     return Container(
       width: 24,
@@ -28,14 +28,65 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.white,
         shape: BoxShape.circle,
       ),
-      child: const Center(
-        child: Text(
-          'G',
-          style: TextStyle(
-            color: Color(0xFF4285F4),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'G',
+              style: TextStyle(
+                color: Color(0xFF4285F4), // Blue
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+            Text(
+              'o',
+              style: TextStyle(
+                color: Color(0xFFEA4335), // Red
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+            Text(
+              'o',
+              style: TextStyle(
+                color: Color(0xFFFBBC05), // Yellow
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+            Text(
+              'g',
+              style: TextStyle(
+                color: Color(0xFF34A853), // Green
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+            Text(
+              'l',
+              style: TextStyle(
+                color: Color(0xFF4285F4), // Blue
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+            Text(
+              'e',
+              style: TextStyle(
+                color: Color(0xFFEA4335), // Red
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+          ],
         ),
       ),
     );
